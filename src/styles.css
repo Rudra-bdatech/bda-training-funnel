@@ -1,0 +1,296 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 16px;
+  --radius-xl: 8px;
+  --radius-2xl: 8px;
+  --radius-3xl: 16px;
+  --radius-4xl: 16px;
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary-glow: var(--primary-glow);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-menu-active: var(--menu-active);
+  --color-forest: #26331a;
+  --color-sage: #a3b86c;
+  --color-line-strong: #8a9682;
+
+  --font-display: "Archivo", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+
+  --shadow-soft: none;
+  --shadow-elevated: none;
+  /* Floating layers only (menus, dropdowns, modals) */
+  --shadow-pop: 0 8px 24px rgba(28, 35, 22, 0.12);
+  --shadow-glow: none;
+
+  --gradient-primary: linear-gradient(#556b2f, #556b2f);
+  --gradient-mesh: none;
+}
+
+:root {
+  --radius: 1rem;
+  --background: #ffffff; /* surface-100 */
+  --foreground: #1c2316; /* ink */
+  --card: #f4f7f0; /* surface-200 / Mist */
+  --card-foreground: #1c2316;
+  --popover: #ffffff;
+  --popover-foreground: #1c2316;
+  /* Primary = brand olive #556b2f */
+  --primary: #556b2f; /* Dark Olive Green */
+  --primary-foreground: #ffffff;
+  --primary-glow: #a3b86c; /* Sage */
+  /* Secondary = #f0f0f0 */
+  --secondary: #eceee8; /* surface-300 */
+  --secondary-foreground: #1c2316;
+  --muted: #eceee8;
+  --muted-foreground: #59634f; /* ink-muted */
+  --accent: #eef1e4; /* primary-tint */
+  --accent-foreground: #1c2316;
+  --destructive: oklch(0.6 0.24 27);
+  --destructive-foreground: oklch(1 0 0);
+  --border: #d5dbcd;
+  --input: #8a9682; /* border-strong */
+  --ring: #44562a; /* focus-ring */
+  /* Mega menu active state = #e5ecde olive tint */
+  --menu-active: #eef1e4;
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+  :focus-visible {
+    outline: 2px solid #44562a;
+    outline-offset: 2px;
+  }
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    -webkit-font-smoothing: antialiased;
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    letter-spacing: -0.015em;
+    font-weight: 700;
+  }
+}
+
+@utility text-gradient {
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+@utility bg-mesh {
+  background-image: var(--gradient-mesh);
+}
+
+@utility glass {
+  background: color-mix(in oklab, white 70%, transparent);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid color-mix(in oklab, white 60%, transparent);
+}
+
+@utility shadow-glow {
+  box-shadow: var(--shadow-glow);
+}
+
+@utility shadow-soft {
+  box-shadow: var(--shadow-soft);
+}
+
+@utility shadow-elevated {
+  box-shadow: var(--shadow-elevated);
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-14px);
+  }
+}
+@keyframes float-slow {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0);
+  }
+  50% {
+    transform: translateY(-24px) rotate(4deg);
+  }
+}
+@keyframes pulse-glow {
+  0%,
+  100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+@keyframes gradient-shift {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@utility animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+@utility animate-float-slow {
+  animation: float-slow 9s ease-in-out infinite;
+}
+@utility animate-pulse-glow {
+  animation: pulse-glow 4s ease-in-out infinite;
+}
+@utility animate-marquee {
+  animation: marquee 40s linear infinite;
+}
+
+/*
+ * Section rhythm: when two sections sit back to back on the plain page
+ * background there is no visible edge between them, so their paddings add up
+ * to a gap twice as big as the one above/below a tinted band. Let only the
+ * first one's bottom padding provide the space.
+ */
+main
+  section:is(:not([class*="bg-"]), [class*="bg-background"])
+  + section:is(:not([class*="bg-"]), [class*="bg-background"]) {
+  padding-top: 0;
+}
+
+/*
+ * Block to screen (desktop): a block that nearly fills the space below the floating navbar
+ * (marked data-screen by use-block-to-screen) is stretched to fill it exactly, content centred
+ * with identical space above and below. Shorter blocks keep their natural height so no big
+ * empty band opens between two sections. Heroes already fill the screen (min-h-svh); pinned
+ * scenes and anything marked data-free keep their own layout.
+ */
+@media (min-width: 1024px) {
+  main > section[data-screen][data-screen]:not([data-free]) {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: calc(100svh - 8rem);
+    scroll-margin-top: 8rem;
+  }
+}
+
+/*
+ * Body copy: long paragraphs are justified, with automatic hyphenation so words
+ * break instead of leaving wide gaps. Anything centred, right-aligned or explicitly
+ * left-aligned (and headings, buttons, labels, quotes) is left as designed.
+ */
+@layer base {
+  main
+    p.leading-relaxed:not(
+      .text-center,
+      .text-center *,
+      .text-right,
+      .text-right *,
+      .text-left,
+      .text-left *
+    ),
+  footer
+    p.leading-relaxed:not(
+      .text-center,
+      .text-center *,
+      .text-right,
+      .text-right *,
+      .text-left,
+      .text-left *
+    ) {
+    text-align: justify;
+    hyphens: auto;
+    text-wrap: pretty;
+  }
+}
+
+/*
+ * Swipe rows (phones): card groups sit in one horizontal, snap-scrolling row instead of a long
+ * vertical stack, with the next card peeking in. Tablet and desktop keep their grids.
+ */
+@media (max-width: 767px) {
+  .swipe-m {
+    display: flex;
+    gap: 1rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    margin-inline: -1.5rem;
+    padding: 0 1.5rem 0.75rem;
+    scroll-padding-inline: 1.5rem;
+    scrollbar-width: none;
+    border: 0;
+    border-radius: 0;
+    background: none;
+  }
+  .swipe-m::-webkit-scrollbar {
+    display: none;
+  }
+  .swipe-m > * {
+    flex: 0 0 82%;
+    scroll-snap-align: start;
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
+  }
+}
+
+/*
+ * Space between two sections: exactly 100px on laptop and desktop (50px above + 50px below each
+ * block), whether or not a section has its own background. Heroes (min-h-svh) and pinned scenes
+ * (data-free or fixed heights) keep their own spacing. Tablets and phones keep the compact rhythm.
+ */
+@media (min-width: 1024px) {
+  main > section:not(.min-h-svh):not([data-free]):not([class*="h-["]) {
+    padding-top: 50px;
+    padding-bottom: 50px;
+  }
+}
