@@ -65,7 +65,7 @@ export function TrustedBy() {
   const logos = FUNNEL.TRUSTED_BY;
   if (!logos.length) return null;
   return (
-    <section className="border-b border-border/70 bg-background py-8 md:py-10">
+    <section className="border-b border-border/70 bg-background pb-8 pt-1 md:pb-10 md:pt-2">
       <div className="mx-auto max-w-5xl md:px-4">
         <p className="text-center text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
           Trusted by
