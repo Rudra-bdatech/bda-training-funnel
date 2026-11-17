@@ -50,20 +50,12 @@ export function UnlockGateDialog({
     };
     const body = document.body;
     const prevOverflow = body.style.overflow;
-    const prevPaddingRight = body.style.paddingRight;
     const prevFocus = document.activeElement as HTMLElement | null;
-    // Hiding the scrollbar widens the page; pad by its width so content doesn't shift right.
-    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
-    if (scrollbarWidth > 0) {
-      const current = parseFloat(window.getComputedStyle(body).paddingRight) || 0;
-      body.style.paddingRight = `${current + scrollbarWidth}px`;
-    }
     body.style.overflow = "hidden";
     window.addEventListener("keydown", onKey);
     primaryRef.current?.focus();
     return () => {
       body.style.overflow = prevOverflow;
-      body.style.paddingRight = prevPaddingRight;
       window.removeEventListener("keydown", onKey);
       prevFocus?.focus?.();
     };

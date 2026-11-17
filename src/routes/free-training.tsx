@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useCallback, useEffect, useRef, useState, type MouseEvent } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowRight, CalendarCheck, History, Lock, PlayCircle } from "lucide-react";
+import { ArrowRight, CalendarCheck, Lock, PlayCircle } from "lucide-react";
 import { FUNNEL } from "@/config/funnel";
 import { withAttribution } from "@/lib/attribution";
 import { trackEvent } from "@/lib/funnel-tracking";
@@ -55,7 +55,7 @@ function FreeTrainingPage() {
     unlockSeconds: FUNNEL.UNLOCK_SECONDS,
     resumeDays: FUNNEL.RESUME_DAYS,
   });
-  const { watched, unlocked, resumed, error, playing, play } = video;
+  const { watched, unlocked, error, playing, play } = video;
   const [gateOpen, setGateOpen] = useState(false);
 
   const remaining = Math.max(0, FUNNEL.UNLOCK_SECONDS - watched);
@@ -91,10 +91,12 @@ function FreeTrainingPage() {
   };
   const closeGate = useCallback(() => setGateOpen(false), []);
   const playFromGate = () => {
-    // Start playback inside the click so browsers allow it, then bring the player into view.
     if (!playing) void play();
     setGateOpen(false);
-    playerRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+    // Delay scroll until after the dialog's overflow:hidden cleanup runs.
+    setTimeout(() => {
+      playerRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+    }, 50);
   };
 
   // Close the popup if the video unlocks while it is open.
@@ -111,35 +113,19 @@ function FreeTrainingPage() {
   return (
     <FunnelLayout>
       <section className="bg-mesh pb-10 pt-5 md:pb-16 md:pt-12">
-        <div className="mx-auto max-w-4xl px-4">
+        <div className="mx-auto max-w-5xl px-4">
           <InAppBrowserNotice />
 
           <FunnelSteps steps={steps} />
 
           <div className="mt-5 text-center md:mt-10">
-            <span className="inline-flex items-center rounded-full border border-border bg-card px-3 py-1 text-xs font-medium text-muted-foreground">
-              {FUNNEL.TRAINING_EYEBROW}
-            </span>
-            <h1 className="mx-auto mt-3 max-w-3xl text-[26px] leading-[1.12] tracking-tight text-balance text-foreground sm:text-3xl md:mt-4 md:text-5xl">
+            <h1 className="mx-auto mt-3 max-w-4xl text-[26px] leading-[1.12] tracking-tight text-foreground sm:text-3xl md:mt-4 md:text-5xl">
               {FUNNEL.TRAINING_HEADLINE}
             </h1>
             <p className="mx-auto mt-3 max-w-2xl text-[15px] text-muted-foreground sm:text-base md:mt-4 md:text-lg">
               {FUNNEL.TRAINING_SUBHEADLINE}
             </p>
           </div>
-
-          <AnimatePresence>
-            {resumed && (
-              <motion.div
-                initial={{ opacity: 0, y: -6 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="mx-auto mt-6 flex w-fit items-center gap-2 rounded-full bg-accent px-4 py-2 text-sm font-medium text-primary"
-              >
-                <History className="h-4 w-4" />
-                Welcome back, your progress is saved
-              </motion.div>
-            )}
-          </AnimatePresence>
 
           {/* Video */}
           <div className="mt-5 overflow-hidden rounded-2xl md:mt-6 md:rounded-3xl border border-border bg-foreground shadow-elevated">
@@ -243,7 +229,7 @@ function FreeTrainingPage() {
       />
 
       <TrustedBy />
-      <FunnelTestimonials />
+      {/* <FunnelTestimonials /> */}
 
       {/* Sticky bottom CTA after unlock */}
       <AnimatePresence>
@@ -255,7 +241,7 @@ function FreeTrainingPage() {
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
             className="fixed inset-x-0 bottom-0 z-50 border-t border-border bg-card/95 p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] shadow-elevated backdrop-blur"
           >
-            <div className="mx-auto flex max-w-4xl items-center justify-between gap-3">
+            <div className="mx-auto flex max-w-5xl items-center justify-between gap-3">
               <p className="hidden text-sm font-medium text-foreground sm:block">
                 Your free strategy call is unlocked
               </p>

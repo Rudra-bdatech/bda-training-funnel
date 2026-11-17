@@ -51,6 +51,10 @@
   --gradient-mesh: none;
 }
 
+html {
+  scrollbar-gutter: stable;
+}
+
 :root {
   --radius: 1rem;
   --background: #ffffff; /* surface-100 */
