@@ -6,6 +6,17 @@
  * before sending traffic to the funnel.
  */
 
+import staava from "@/assets/clients/staava.png";
+import bluespaceHealthcare from "@/assets/clients/bluespace-healthcare.png";
+import bharatIct from "@/assets/clients/bharat-ict.png";
+import ebcc from "@/assets/clients/ebcc.png";
+import naksAssociates from "@/assets/clients/naks-associates.png";
+import tataDigital from "@/assets/clients/tata-digital.png";
+import iferp from "@/assets/clients/iferp.png";
+import pritikaMoney from "@/assets/clients/pritika-money.png";
+import pinkAndBlue from "@/assets/clients/pink-and-blue.png";
+import finanzaPersonel from "@/assets/clients/finanza-personel.png";
+
 export type FunnelTestimonial = {
   quote: string;
   name: string;
@@ -87,14 +98,19 @@ export const FUNNEL = {
     },
   ] satisfies FunnelTestimonial[],
 
-  /** TODO: Publications for the "As featured in" row. Add `logo` (image URL/import) to show a logo instead of text. */
-  FEATURED_IN: [
-    { name: "Publication One" },
-    { name: "Publication Two" },
-    { name: "Publication Three" },
-    { name: "Publication Four" },
-    { name: "Publication Five" },
-  ] as { name: string; logo?: string }[],
+  /** Client logos for the "Trusted by" grid (same files as the main website's logo marquee). */
+  TRUSTED_BY: [
+    { name: "Staava", logo: staava },
+    { name: "Bluespace Healthcare", logo: bluespaceHealthcare },
+    { name: "Bharat ICT", logo: bharatIct },
+    { name: "EBCC", logo: ebcc },
+    { name: "Naks & Associates", logo: naksAssociates },
+    { name: "Tata Digital", logo: tataDigital },
+    { name: "IFERP", logo: iferp },
+    { name: "Pritika Money", logo: pritikaMoney },
+    { name: "Pink & Blue Symbiotic Living", logo: pinkAndBlue },
+    { name: "Finanza Personel", logo: finanzaPersonel },
+  ] as { name: string; logo: string }[],
 
   /** TODO: Review and edit the FAQ answers. */
   FAQ: [

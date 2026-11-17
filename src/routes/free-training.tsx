@@ -8,7 +8,7 @@ import { trackEvent } from "@/lib/funnel-tracking";
 import { FunnelLayout } from "@/components/funnel/FunnelLayout";
 import { FunnelSteps, type StepState } from "@/components/funnel/FunnelSteps";
 import { InAppBrowserNotice } from "@/components/funnel/InAppBrowserNotice";
-import { FeaturedIn, FunnelTestimonials } from "@/components/funnel/SocialProof";
+import { FunnelTestimonials, TrustedBy } from "@/components/funnel/SocialProof";
 import { useVimeoWatchTime } from "@/components/funnel/useVimeoWatchTime";
 import { TrainingVideoPlayer } from "@/components/funnel/TrainingVideoPlayer";
 import { UnlockGateDialog } from "@/components/funnel/UnlockGateDialog";
@@ -242,7 +242,7 @@ function FreeTrainingPage() {
         pct={pct}
       />
 
-      <FeaturedIn />
+      <TrustedBy />
       <FunnelTestimonials />
 
       {/* Sticky bottom CTA after unlock */}

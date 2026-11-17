@@ -29,7 +29,7 @@ After changes, run type check, lint and build.
 ## Key files
 
 - `src/config/funnel.ts`: **all settings and copy** (video ID, unlock time, Calendly URLs, phone/WhatsApp,
-  testimonials, FAQ, legal links, Meta Pixel ID, GTM/GA4 ID, `META_CAPI_ENABLED`).
+  testimonials, "Trusted by" client logos (`src/assets/clients`), FAQ, legal links, Meta Pixel ID, GTM/GA4 ID, `META_CAPI_ENABLED`).
 - `src/components/funnel/useVimeoWatchTime.ts`: player + watch rules. `watched` = seconds of natural playback
   (timeupdate delta 0–1.5s) and drives the unlock; `maxWatched` = furthest point reached; seeks past it are clamped,
   and a `seeked` safety net snaps back. Progress is saved in localStorage key `bda_training_progress_<videoId>`
@@ -50,7 +50,7 @@ Temporary **test** settings in `src/config/funnel.ts`:
 - `BOOKING_URL = "/thank-you-call"` (skips Calendly). Must become the real Calendly event URL, otherwise visitors
   see "Your call is confirmed" without booking.
 
-Still placeholders: phone / WhatsApp numbers, testimonials, "As featured in", FAQ answers, legal links (`#`),
+Still placeholders: phone / WhatsApp numbers, testimonials, FAQ answers, legal links (`#`),
 Meta Pixel ID, GTM/GA4 ID. Meta CAPI not implemented.
 
 To go live: fill the config, deploy (subdomain to be decided, e.g. training.<domain>), then in Calendly set

@@ -1,5 +1,6 @@
 import { Quote, Star } from "lucide-react";
 import { FUNNEL } from "@/config/funnel";
+import { cn } from "@/lib/utils";
 import {
   Accordion,
   AccordionContent,
@@ -54,32 +55,45 @@ export function FunnelTestimonials({ title = "What founders say after the call" 
   );
 }
 
-export function FeaturedIn() {
-  if (!FUNNEL.FEATURED_IN.length) return null;
+/**
+ * Client logos on white cards, scrolling right-to-left in an endless loop.
+ * The list is rendered twice and the strip moves by -50%, so the loop has no visible jump.
+ * Spacing is padding on each item (not `gap`) so both halves are exactly the same width.
+ * Pauses on hover; with "reduce motion" on, it becomes a static row you can swipe.
+ */
+export function TrustedBy() {
+  const logos = FUNNEL.TRUSTED_BY;
+  if (!logos.length) return null;
   return (
-    <section className="border-y border-border/70 bg-card py-8">
-      <div className="mx-auto max-w-5xl px-4">
-        <p className="text-center text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">
-          As featured in
+    <section className="border-y border-border/70 bg-card py-8 md:py-10">
+      <div className="mx-auto max-w-5xl md:px-4">
+        <p className="text-center text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+          Trusted by
         </p>
-        <div className="mt-5 flex flex-wrap items-center justify-center gap-x-10 gap-y-4">
-          {FUNNEL.FEATURED_IN.map((p) =>
-            p.logo ? (
-              <img
-                key={p.name}
-                src={p.logo}
-                alt={p.name}
-                className="h-7 w-auto opacity-70 grayscale md:h-8"
-              />
-            ) : (
-              <span
-                key={p.name}
-                className="text-lg font-semibold tracking-tight text-muted-foreground/70"
-              >
-                {p.name}
-              </span>
-            ),
-          )}
+        <div className="group mt-5 overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)] motion-reduce:overflow-x-auto md:mt-6">
+          <ul className="flex w-max animate-marquee group-hover:[animation-play-state:paused] motion-reduce:animate-none">
+            {[...logos, ...logos].map((c, i) => {
+              const copy = i >= logos.length;
+              return (
+                <li
+                  key={i}
+                  aria-hidden={copy || undefined}
+                  className={cn("shrink-0 pr-3 md:pr-4", copy && "motion-reduce:hidden")}
+                >
+                  <div className="flex h-20 w-40 items-center justify-center rounded-2xl border border-border bg-background px-4 md:h-24 md:w-48">
+                    <img
+                      src={c.logo}
+                      alt={copy ? "" : c.name}
+                      width={200}
+                      height={80}
+                      decoding="async"
+                      className="max-h-11 w-auto max-w-full object-contain md:max-h-14"
+                    />
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
         </div>
       </div>
     </section>
