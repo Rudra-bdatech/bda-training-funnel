@@ -125,15 +125,16 @@ export function TrainingVideoPlayer({
           />
         )}
 
+        {/* Before the first play: clean frame with a small play button bottom-right (whole frame is clickable). */}
         {showStartButton && (
           <button
             type="button"
             onClick={() => void startPlayback()}
-            className="absolute inset-0 z-10 grid place-items-center bg-black/30 transition hover:bg-black/20"
+            className="absolute inset-0 z-10 cursor-pointer bg-transparent"
             aria-label="Play training"
           >
-            <span className="grid h-20 w-20 place-items-center rounded-full bg-primary text-primary-foreground shadow-glow transition group-hover/player:scale-105">
-              <Play className="ml-1 h-9 w-9 fill-current" />
+            <span className="absolute bottom-3 right-3 grid h-12 w-12 place-items-center rounded-full border-2 border-white/80 bg-black/50 text-white backdrop-blur-sm transition group-hover/player:scale-110 group-hover/player:bg-black/70 sm:bottom-5 sm:right-5 sm:h-14 sm:w-14">
+              <Play className="ml-0.5 h-5 w-5 fill-current sm:h-6 sm:w-6" />
             </span>
           </button>
         )}
@@ -151,7 +152,14 @@ export function TrainingVideoPlayer({
         )}
       </div>
 
-      <ControlBar video={video} isFullscreen={isFullscreen} onToggleFullscreen={toggleFullscreen} />
+      {/* Controls appear once the video has started. */}
+      {video.started && (
+        <ControlBar
+          video={video}
+          isFullscreen={isFullscreen}
+          onToggleFullscreen={toggleFullscreen}
+        />
+      )}
     </div>
   );
 }
@@ -168,8 +176,9 @@ function ControlBar({
   const iconBtn =
     "grid h-9 w-9 shrink-0 place-items-center rounded-full text-white/90 transition hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-glow disabled:opacity-40";
 
+  // Phones: seek bar gets its own full-width row on top; buttons sit below it.
   return (
-    <div className="flex items-center gap-1.5 bg-neutral-900 px-2 py-2 text-white sm:gap-3 sm:px-3">
+    <div className="flex items-center gap-1.5 bg-neutral-900 px-2 py-2 text-white max-sm:flex-wrap max-sm:gap-y-0 max-sm:pt-1 sm:gap-3 sm:px-3">
       <button
         type="button"
         className={iconBtn}
@@ -186,7 +195,7 @@ function ControlBar({
 
       <SeekBar video={video} />
 
-      <span className="shrink-0 font-mono text-xs tabular-nums text-white/85 sm:text-sm">
+      <span className="shrink-0 font-mono text-xs tabular-nums text-white/85 max-sm:mr-auto sm:text-sm">
         {formatClock(video.currentTime)}
         <span className="text-white/40"> / </span>
         {formatClock(video.duration)}
@@ -292,7 +301,7 @@ function SeekBar({ video }: { video: VimeoWatchTime }) {
         if (!draggingRef.current) setHover(null);
       }}
       className={cn(
-        "relative flex h-8 min-w-0 flex-1 touch-none select-none items-center",
+        "relative flex h-8 min-w-0 flex-1 touch-none select-none items-center max-sm:order-first max-sm:basis-full max-sm:px-1.5",
         !enabled && "opacity-50",
       )}
       style={{

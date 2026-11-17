@@ -54,7 +54,7 @@ export const FUNNEL = {
   // ---------------------------------------------------------------- Copy
   TRAINING_EYEBROW: "Free training · BDA Technologies",
   TRAINING_HEADLINE:
-    "Why most service businesses stall at ₹1–5 Cr — and the systems that break the ceiling",
+    "Why most service businesses stall at ₹1–\u20605\u00a0Cr\u00a0— and the systems that break the ceiling",
   TRAINING_SUBHEADLINE:
     "Watch the full training. Your free strategy call unlocks once you've seen the key parts — so we spend the call on your business, not the basics.",
 

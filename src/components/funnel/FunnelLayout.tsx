@@ -15,7 +15,7 @@ export function FunnelLayout({ children }: { children: ReactNode }) {
   return (
     <div className="flex min-h-screen flex-col bg-background">
       <header className="border-b border-border/70 bg-background/80 backdrop-blur">
-        <div className="mx-auto flex h-16 max-w-5xl items-center justify-center px-4">
+        <div className="mx-auto flex h-14 max-w-5xl md:h-16 items-center justify-center px-4">
           <img src={bdaLogo} alt="BDA Technologies" className="h-8 w-auto md:h-9" />
         </div>
       </header>

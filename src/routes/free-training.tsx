@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useRef, useState, type MouseEvent } from "react";
+import { useCallback, useEffect, useRef, useState, type MouseEvent } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowRight, CalendarCheck, History, Lock, PlayCircle } from "lucide-react";
 import { FUNNEL } from "@/config/funnel";
@@ -11,6 +11,7 @@ import { InAppBrowserNotice } from "@/components/funnel/InAppBrowserNotice";
 import { FeaturedIn, FunnelTestimonials } from "@/components/funnel/SocialProof";
 import { useVimeoWatchTime } from "@/components/funnel/useVimeoWatchTime";
 import { TrainingVideoPlayer } from "@/components/funnel/TrainingVideoPlayer";
+import { UnlockGateDialog } from "@/components/funnel/UnlockGateDialog";
 import { cn } from "@/lib/utils";
 
 const TITLE = "Free Training — BDA Technologies";
@@ -54,7 +55,8 @@ function FreeTrainingPage() {
     unlockSeconds: FUNNEL.UNLOCK_SECONDS,
     resumeDays: FUNNEL.RESUME_DAYS,
   });
-  const { watched, unlocked, resumed, error } = video;
+  const { watched, unlocked, resumed, error, playing, play } = video;
+  const [gateOpen, setGateOpen] = useState(false);
 
   const remaining = Math.max(0, FUNNEL.UNLOCK_SECONDS - watched);
   const pct = Math.min(100, (watched / FUNNEL.UNLOCK_SECONDS) * 100);
@@ -83,6 +85,23 @@ function FreeTrainingPage() {
     trackEvent("book_click", { placement, watched_seconds: Math.round(watched) });
   };
 
+  const openGate = () => {
+    setGateOpen(true);
+    trackEvent("locked_cta_click", { watched_seconds: Math.round(watched) });
+  };
+  const closeGate = useCallback(() => setGateOpen(false), []);
+  const playFromGate = () => {
+    // Start playback inside the click so browsers allow it, then bring the player into view.
+    if (!playing) void play();
+    setGateOpen(false);
+    playerRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+  };
+
+  // Close the popup if the video unlocks while it is open.
+  useEffect(() => {
+    if (unlocked) setGateOpen(false);
+  }, [unlocked]);
+
   const steps: { label: string; state: StepState }[] = [
     { label: "Registered", state: "done" },
     { label: "Watch training", state: unlocked ? "done" : "active" },
@@ -91,20 +110,20 @@ function FreeTrainingPage() {
 
   return (
     <FunnelLayout>
-      <section className="bg-mesh pb-12 pt-8 md:pb-16 md:pt-12">
+      <section className="bg-mesh pb-10 pt-5 md:pb-16 md:pt-12">
         <div className="mx-auto max-w-4xl px-4">
           <InAppBrowserNotice />
 
           <FunnelSteps steps={steps} />
 
-          <div className="mt-8 text-center md:mt-10">
+          <div className="mt-5 text-center md:mt-10">
             <span className="inline-flex items-center rounded-full border border-border bg-card px-3 py-1 text-xs font-medium text-muted-foreground">
               {FUNNEL.TRAINING_EYEBROW}
             </span>
-            <h1 className="mx-auto mt-4 max-w-3xl text-3xl leading-[1.1] tracking-tight text-foreground md:text-5xl">
+            <h1 className="mx-auto mt-3 max-w-3xl text-[26px] leading-[1.12] tracking-tight text-balance text-foreground sm:text-3xl md:mt-4 md:text-5xl">
               {FUNNEL.TRAINING_HEADLINE}
             </h1>
-            <p className="mx-auto mt-4 max-w-2xl text-base text-muted-foreground md:text-lg">
+            <p className="mx-auto mt-3 max-w-2xl text-[15px] text-muted-foreground sm:text-base md:mt-4 md:text-lg">
               {FUNNEL.TRAINING_SUBHEADLINE}
             </p>
           </div>
@@ -123,7 +142,7 @@ function FreeTrainingPage() {
           </AnimatePresence>
 
           {/* Video */}
-          <div className="mt-6 overflow-hidden rounded-3xl border border-border bg-foreground shadow-elevated">
+          <div className="mt-5 overflow-hidden rounded-2xl md:mt-6 md:rounded-3xl border border-border bg-foreground shadow-elevated">
             {FUNNEL.VIMEO_VIDEO_ID ? (
               <TrainingVideoPlayer mountRef={playerRef} video={video} />
             ) : (
@@ -137,17 +156,27 @@ function FreeTrainingPage() {
           {/* Unlock status + CTA */}
           <div
             ref={ctaRef}
-            className="mt-6 rounded-3xl border border-border bg-card p-5 shadow-soft md:p-7"
+            className="mt-4 rounded-2xl border border-border bg-card p-4 shadow-soft md:mt-6 md:rounded-3xl md:p-7"
           >
             {!unlocked ? (
-              <div className="flex flex-col items-center gap-4 text-center md:flex-row md:text-left">
-                <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-secondary text-muted-foreground">
+              // Mobile: compact (lock + title | timer, bar below). Desktop: icon tile, title + bar, big timer.
+              <div className="flex items-center gap-4">
+                <span className="hidden h-12 w-12 shrink-0 place-items-center rounded-2xl bg-secondary text-muted-foreground md:grid">
                   <Lock className="h-5 w-5" />
                 </span>
-                <div className="flex-1">
-                  <p className="font-semibold text-foreground">
-                    Unlocks after {unlockLabel} of watching
-                  </p>
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-center justify-between gap-3">
+                    <p className="flex min-w-0 items-center gap-1.5 text-xs font-semibold text-foreground sm:text-sm md:gap-2 md:text-base">
+                      <Lock className="h-3.5 w-3.5 shrink-0 text-muted-foreground md:hidden" />
+                      <span className="truncate">Unlocks after {unlockLabel} of watching</span>
+                    </p>
+                    <p
+                      className="shrink-0 font-mono text-lg font-semibold tabular-nums text-foreground md:hidden"
+                      aria-live="polite"
+                    >
+                      {formatClock(remaining)}
+                    </p>
+                  </div>
                   <div className="mt-2 h-2 w-full overflow-hidden rounded-full bg-secondary">
                     <div
                       className="h-full rounded-full bg-primary transition-[width] duration-500"
@@ -155,7 +184,7 @@ function FreeTrainingPage() {
                     />
                   </div>
                 </div>
-                <div className="text-center">
+                <div className="hidden text-center md:block">
                   <p
                     className="font-mono text-3xl font-semibold tabular-nums text-foreground"
                     aria-live="polite"
@@ -177,7 +206,7 @@ function FreeTrainingPage() {
                 <a
                   href={bookingHref}
                   onClick={(e) => onBookClick(e, "main")}
-                  className="group inline-flex w-full items-center justify-center gap-2 rounded-full bg-primary px-8 py-4 text-base font-semibold text-primary-foreground shadow-glow transition hover:shadow-elevated md:w-auto"
+                  className="group inline-flex w-full items-center justify-center gap-2 rounded-full bg-primary px-6 py-3.5 text-base md:px-8 md:py-4 font-semibold text-primary-foreground shadow-glow transition hover:shadow-elevated md:w-auto"
                 >
                   Book my call
                   <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-0.5" />
@@ -185,14 +214,16 @@ function FreeTrainingPage() {
               ) : (
                 <button
                   type="button"
-                  disabled
-                  className="inline-flex w-full cursor-not-allowed items-center justify-center gap-2 rounded-full bg-secondary px-8 py-4 text-base font-semibold text-muted-foreground md:w-auto"
+                  aria-disabled="true"
+                  aria-haspopup="dialog"
+                  onClick={openGate}
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-secondary px-6 py-3.5 text-base md:px-8 md:py-4 font-semibold text-muted-foreground transition hover:bg-secondary/80 hover:text-foreground md:w-auto"
                 >
                   <Lock className="h-4 w-4" />
                   Watch {unlockLabel} to unlock
                 </button>
               )}
-              <p className="mt-3 max-w-md text-center text-sm text-muted-foreground">
+              <p className="mt-3 max-w-2xl text-center text-sm text-balance text-muted-foreground">
                 {unlocked
                   ? "The call is free, with no obligation."
                   : "Keep watching. This unlocks on its own. The call is free, with no obligation."}
@@ -201,6 +232,15 @@ function FreeTrainingPage() {
           </div>
         </div>
       </section>
+
+      <UnlockGateDialog
+        open={gateOpen}
+        onClose={closeGate}
+        onPlay={playFromGate}
+        unlockLabel={unlockLabel}
+        remainingLabel={formatClock(remaining)}
+        pct={pct}
+      />
 
       <FeaturedIn />
       <FunnelTestimonials />

@@ -10,10 +10,12 @@ import {
 export function FunnelTestimonials({ title = "What founders say after the call" }) {
   if (!FUNNEL.TESTIMONIALS.length) return null;
   return (
-    <section className="py-14 md:py-20">
+    <section className="py-10 md:py-20">
       <div className="mx-auto max-w-5xl px-4">
-        <h2 className="text-center text-3xl tracking-tight text-foreground md:text-4xl">{title}</h2>
-        <div className="mt-10 grid gap-4 md:grid-cols-3">
+        <h2 className="text-center text-2xl tracking-tight text-balance text-foreground sm:text-3xl md:text-4xl">
+          {title}
+        </h2>
+        <div className="mt-6 grid gap-4 md:mt-10 md:grid-cols-3">
           {FUNNEL.TESTIMONIALS.map((t, i) => (
             <figure
               key={i}
@@ -87,9 +89,9 @@ export function FeaturedIn() {
 export function FunnelFaq() {
   if (!FUNNEL.FAQ.length) return null;
   return (
-    <section className="py-14 md:py-20">
+    <section className="py-10 md:py-20">
       <div className="mx-auto max-w-3xl px-4">
-        <h2 className="text-center text-3xl tracking-tight text-foreground md:text-4xl">
+        <h2 className="text-center text-2xl tracking-tight text-balance text-foreground sm:text-3xl md:text-4xl">
           Questions before the call
         </h2>
         <Accordion
