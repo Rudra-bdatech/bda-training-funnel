@@ -52,13 +52,13 @@ export const FUNNEL = {
 
   // ------------------------------------------------------- Contact / vCard
   /** TODO: WhatsApp number in international format, digits only (no +, spaces or dashes). */
-  WHATSAPP_NUMBER: "919876543210",
+  WHATSAPP_NUMBER: "918929465115",
   WHATSAPP_MESSAGE: "Hi BDA team, I just booked my strategy call. Confirming I'll be available.",
   /** Name shown on the saved contact card. */
   TEAM_DISPLAY_NAME: "BDA Technologies Team",
   TEAM_ORGANISATION: "BDA Technologies",
   /** TODO: Phone number the team calls from, in +<country><number> format. */
-  TEAM_PHONE: "+919876543210",
+  TEAM_PHONE: "+918929465115",
   TEAM_EMAIL: "hello@bdatechnologies.com",
   TEAM_WEBSITE: "https://bdatechnologies.com",
 
