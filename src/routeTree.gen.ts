@@ -9,13 +9,13 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as ThankYouCallRouteImport } from './routes/thank-you-call'
-import { Route as FreeTrainingRouteImport } from './routes/free-training'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as FreeTrainingRouteImport } from './routes/free-training'
+import { Route as ThankYouCallRouteImport } from './routes/thank-you-call'
 
-const ThankYouCallRoute = ThankYouCallRouteImport.update({
-  id: '/thank-you-call',
-  path: '/thank-you-call',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FreeTrainingRoute = FreeTrainingRouteImport.update({
@@ -23,9 +23,9 @@ const FreeTrainingRoute = FreeTrainingRouteImport.update({
   path: '/free-training',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const ThankYouCallRoute = ThankYouCallRouteImport.update({
+  id: '/thank-you-call',
+  path: '/thank-you-call',
   getParentRoute: () => rootRouteImport,
 } as any)
 
@@ -61,11 +61,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/thank-you-call': {
-      id: '/thank-you-call'
-      path: '/thank-you-call'
-      fullPath: '/thank-you-call'
-      preLoaderRoute: typeof ThankYouCallRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/free-training': {
@@ -75,11 +75,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FreeTrainingRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/thank-you-call': {
+      id: '/thank-you-call'
+      path: '/thank-you-call'
+      fullPath: '/thank-you-call'
+      preLoaderRoute: typeof ThankYouCallRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
