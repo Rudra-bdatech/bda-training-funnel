@@ -28,7 +28,7 @@ export type BookingEventInput = z.infer<typeof bookingEventSchema>;
  *  4. Read client IP / user agent from the incoming request headers.
  */
 export const sendBookingConversion = createServerFn({ method: "POST" })
-  .inputValidator((data: unknown) => bookingEventSchema.parse(data))
+  .validator((data: unknown) => bookingEventSchema.parse(data))
   .handler(async ({ data }) => {
     void data;
     return { ok: false as const, skipped: true as const, reason: "Meta CAPI not implemented yet" };

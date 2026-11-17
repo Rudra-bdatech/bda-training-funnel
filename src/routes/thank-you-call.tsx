@@ -102,7 +102,7 @@ function ThankYouCallPage() {
           fbc: attribution._fbc,
           sourceUrl: cleaned.href,
         },
-      }).catch((e) => console.error("Meta CAPI call failed", e));
+      }).catch((e: unknown) => console.error("Meta CAPI call failed", e));
     }
   }, [sendConversion]);
 
